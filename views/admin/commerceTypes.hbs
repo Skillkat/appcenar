@@ -1,0 +1,27 @@
+<h2>Mantenimiento de Tipos de Comercios</h2>
+<a href="/admin/commerce-type/new" class="btn btn-primary mb-3">Nuevo Tipo de Comercio</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Icono</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Comercios</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each commerceTypes}}
+      <tr>
+        <td>{{#if this.icon}}<img src="/uploads/{{this.icon}}" alt="{{this.name}}" style="width: 50px; height: 50px; object-fit: cover;">{{/if}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.description}}</td>
+        <td>{{this.CommerceProfiles.length}}</td>
+        <td>
+          <a href="/admin/commerce-type/edit/{{this.id}}" class="btn btn-sm btn-primary">Editar</a>
+          <a href="/admin/commerce-type/delete/{{this.id}}" class="btn btn-sm btn-danger">Eliminar</a>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

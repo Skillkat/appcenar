@@ -1,0 +1,28 @@
+<h2>Perfil del Comercio</h2>
+<form action="/commerce/profile" method="POST" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="name" class="form-label">Nombre</label>
+    <input type="text" class="form-control" id="name" name="name" value="{{profile.name}}" required>
+  </div>
+  <div class="mb-3">
+    <label for="phone" class="form-label">Teléfono</label>
+    <input type="text" class="form-control" id="phone" name="phone" value="{{profile.phone}}" required>
+  </div>
+  <div class="mb-3">
+    <label for="openHour" class="form-label">Hora de Apertura</label>
+    <input type="time" class="form-control" id="openHour" name="openHour" value="{{profile.openHour}}" required>
+  </div>
+  <div class="mb-3">
+    <label for="closeHour" class="form-label">Hora de Cierre</label>
+    <input type="time" class="form-control" id="closeHour" name="closeHour" value="{{profile.closeHour}}" required>
+  </div>
+  <div class="mb-3">
+    <label for="file" class="form-label">Logo</label>
+    <input type="file" class="form-control" id="file" name="file">
+    {{#if profile.logo}}
+      <img src="/uploads/{{profile.logo}}" alt="Logo" style="height: 100px; object-fit: cover;">
+    {{/if}}
+  </div>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+  <a href="/commerce/home" class="btn btn-secondary">Volver</a>
+</form>

@@ -1,0 +1,39 @@
+<h2>Seleccionar Dirección</h2>
+<div class="row">
+  <div class="col-md-8">
+    <h3>Direcciones</h3>
+    {{#if addresses.length}}
+      <form action="/client/select-address/{{commerce.id}}" method="POST">
+        {{#each addresses}}
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="addressId" id="address{{this.id}}" value="{{this.id}}" required>
+            <label class="form-check-label" for="address{{this.id}}">
+              {{this.name}}: {{this.description}}
+            </label>
+          </div>
+        {{/each}}
+        <button type="submit" class="btn btn-primary mt-3">Pedir</button>
+      </form>
+    {{else}}
+      <p>No tienes direcciones registradas. Crea una para continuar.</p>
+    {{/if}}
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{commerce.name}}</h5>
+        {{#if commerce.logo}}
+          <img src="/uploads/{{commerce.logo}}" alt="{{commerce.name}}" style="height: 100px; object-fit: cover;">
+        {{/if}}
+        <h6>Productos</h6>
+        {{#each cart}}
+          <p>{{this.name}} - RD$ {{this.price}}</p>
+        {{/each}}
+        <p><strong>Subtotal:</strong> RD$ {{subtotal}}</p>
+        <p><strong>ITBIS ({{../config.itbis}}%):</strong> RD$ {{itbisAmount}}</p>
+        <p><strong>Total:</strong> RD$ {{total}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="/client/catalog/{{commerce.id}}" class="btn btn-secondary">Volver</a>

@@ -1,0 +1,6 @@
+<h2>Eliminar Producto</h2>
+<p>¿Está seguro que desea eliminar este producto: {{product.name}}?</p>
+<form action="/commerce/product/delete/{{product.id}}" method="POST">
+  <button type="submit" class="btn btn-danger">Aceptar</button>
+  <a href="/commerce/products" class="btn btn-secondary">Cancelar</a>
+</form>

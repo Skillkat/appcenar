@@ -1,0 +1,57 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h2>Registro de Cliente o Delivery</h2>
+    {{#if errors}}
+      <div class="alert alert-danger">
+        {{#each errors}}
+          <p>{{this.msg}}</p>
+        {{/each}}
+      </div>
+    {{/if}}
+    <form action="/auth/register-client-delivery" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="firstName" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" value="{{firstName}}" required>
+      </div>
+      <div class="mb-3">
+        <label for="lastName" class="form-label">Apellido</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" value="{{lastName}}" required>
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Teléfono</label>
+        <input type="text" class="form-control" id="phone" name="phone" value="{{phone}}" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{email}}" required>
+      </div>
+      <div class="mb-3">
+        <label for="file" class="form-label">Foto de Perfil</label>
+        <input type="file" class="form-control" id="file" name="file">
+      </div>
+      <div class="mb-3">
+        <label for="username" class="form-label">Nombre de Usuario</label>
+        <input type="text" class="form-control" id="username" name="username" value="{{username}}" required>
+      </div>
+      <div class="mb-3">
+        <label for="role" class="form-label">Rol</label>
+        <select class="form-select" id="role" name="role" required>
+          <option value="" disabled selected>Selecciona un rol</option>
+          <option value="client">Cliente</option>
+          <option value="delivery">Delivery</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" required>
+      </div>
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" autocomplete="new-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Registrarse</button>
+      <a href="/auth/login" class="btn btn-secondary">Volver</a>
+    </form>
+  </div>
+</div>
+```

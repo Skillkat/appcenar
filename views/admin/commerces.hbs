@@ -1,0 +1,35 @@
+<h2>Listado de Comercios</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Logo</th>
+      <th>Nombre</th>
+      <th>Pedidos</th>
+      <th>Teléfono</th>
+      <th>Hora de Apertura</th>
+      <th>Hora de Cierre</th>
+      <th>Correo</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each commerces}}
+      <tr>
+        <td>{{#if this.logo}}<img src="/uploads/{{this.logo}}" alt="{{this.name}}" style="width: 50px; height: 50px; object-fit: cover;">{{/if}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.CommerceOrders.length}}</td>
+        <td>{{this.phone}}</td>
+        <td>{{this.openHour}}</td>
+        <td>{{this.closeHour}}</td>
+        <td>{{this.User.email}}</td>
+        <td>
+          <form action="/admin/commerce/{{this.id}}/toggle-active" method="POST">
+            <button type="submit" class="btn btn-sm btn-{{#if this.User.active}}danger{{else}}success{{/if}}">
+              {{#if this.User.active}}Inactivar{{else}}Activar{{/if}}
+            </button>
+          </form>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

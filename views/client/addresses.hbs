@@ -1,0 +1,23 @@
+<h2>Mis Direcciones</h2>
+<a href="/client/address/new" class="btn btn-primary mb-3">Nueva Dirección</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each addresses}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>{{this.description}}</td>
+        <td>
+          <a href="/client/address/edit/{{this.id}}" class="btn btn-sm btn-primary">Editar</a>
+          <a href="/client/address/delete/{{this.id}}" class="btn btn-sm btn-danger">Eliminar</a>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

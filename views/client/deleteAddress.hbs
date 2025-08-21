@@ -1,0 +1,6 @@
+<h2>Eliminar Dirección</h2>
+<p>¿Está seguro que desea eliminar esta dirección: {{address.name}}?</p>
+<form action="/client/address/delete/{{address.id}}" method="POST">
+  <button type="submit" class="btn btn-danger">Aceptar</button>
+  <a href="/client/addresses" class="btn btn-secondary">Cancelar</a>
+</form>

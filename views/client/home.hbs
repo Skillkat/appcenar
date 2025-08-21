@@ -1,0 +1,16 @@
+<h2>Tipos de Comercios</h2>
+<div class="row">
+  {{#each commerceTypes}}
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        {{#if this.icon}}
+          <img src="/uploads/{{this.icon}}" class="card-img-top" alt="{{this.name}}" style="height: 100px; object-fit: cover;">
+        {{/if}}
+        <div class="card-body">
+          <h5 class="card-title">{{this.name}}</h5>
+          <a href="/client/commerce-list/{{this.id}}" class="btn btn-primary">comercios</a>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

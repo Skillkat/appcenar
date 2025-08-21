@@ -1,0 +1,6 @@
+<h2>Eliminar Tipo de Comercio</h2>
+<p>¿Está seguro que desea eliminar este tipo de comercio: {{commerceType.name}} y todos los comercios asociados?</p>
+<form action="/admin/commerce-type/delete/{{commerceType.id}}" method="POST">
+  <button type="submit" class="btn btn-danger">Aceptar</button>
+  <a href="/admin/commerce-types" class="btn btn-secondary">Cancelar</a>
+</form>

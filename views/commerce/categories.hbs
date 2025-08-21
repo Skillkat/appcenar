@@ -1,0 +1,25 @@
+<h2>Mantenimiento de Categorías</h2>
+<a href="/commerce/category/new" class="btn btn-primary mb-3">Nueva Categoría</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Productos</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each categories}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>{{this.description}}</td>
+        <td>{{this.Products.length}}</td>
+        <td>
+          <a href="/commerce/category/edit/{{this.id}}" class="btn btn-sm btn-primary">Editar</a>
+          <a href="/commerce/category/delete/{{this.id}}" class="btn btn-sm btn-danger">Eliminar</a>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

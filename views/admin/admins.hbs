@@ -1,0 +1,33 @@
+<h2>Mantenimiento de Administradores</h2>
+<a href="/admin/admin/new" class="btn btn-primary mb-3">Nuevo Administrador</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Usuario</th>
+      <th>Cédula</th>
+      <th>Correo</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each admins}}
+      <tr>
+        <td>{{this.firstName}}</td>
+        <td>{{this.lastName}}</td>
+        <td>{{this.User.username}}</td>
+        <td>{{this.idCard}}</td>
+        <td>{{this.User.email}}</td>
+        <td>
+          <a href="/admin/admin/edit/{{this.id}}" class="btn btn-sm btn-primary">Editar</a>
+          <form action="/admin/admin/{{this.id}}/toggle-active" method="POST">
+            <button type="submit" class="btn btn-sm btn-{{#if this.User.active}}danger{{else}}success{{/if}}">
+              {{#if this.User.active}}Inactivar{{else}}Activar{{/if}}
+            </button>
+          </form>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

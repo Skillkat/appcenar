@@ -1,0 +1,26 @@
+<h2>Detalles del Pedido</h2>
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">{{order.Commerce.name}}</h5>
+    <p class="card-text">Estado: {{order.status}}</p>
+    <p class="card-text">Fecha: {{order.createdAt}}</p>
+    <h6>Productos</h6>
+    {{#each order.OrderProducts}}
+      <div class="d-flex">
+        {{#if this.Product.photo}}
+          <img src="/uploads/{{this.Product.photo}}" alt="{{this.Product.name}}" style="width: 50px; height: 50px; object-fit: cover;">
+        {{/if}}
+        <div class="ms-2">
+          <p>{{this.Product.name}} - RD$ {{this.price}}</p>
+        </div>
+      </div>
+    {{/each}}
+    <p><strong>Total:</strong> RD$ {{order.total}}</p>
+    {{#if (eq order.status 'pending')}}
+      <form action="/commerce/order/{{order.id}}/assign-delivery" method="POST">
+        <button type="submit" class="btn btn-primary">Asignar Delivery</button>
+      </form>
+    {{/if}}
+    <a href="/commerce/home" class="btn btn-secondary">Volver</a>
+  </div>
+</div>

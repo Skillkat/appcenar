@@ -1,0 +1,24 @@
+<h2>Mi Perfil</h2>
+<form action="/client/profile" method="POST" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="firstName" class="form-label">Nombre</label>
+    <input type="text" class="form-control" id="firstName" name="firstName" value="{{profile.firstName}}" required>
+  </div>
+  <div class="mb-3">
+    <label for="lastName" class="form-label">Apellido</label>
+    <input type="text" class="form-control" id="lastName" name="lastName" value="{{profile.lastName}}" required>
+  </div>
+  <div class="mb-3">
+    <label for="phone" class="form-label">Teléfono</label>
+    <input type="text" class="form-control" id="phone" name="phone" value="{{profile.phone}}" required>
+  </div>
+  <div class="mb-3">
+    <label for="file" class="form-label">Foto de Perfil</label>
+    <input type="file" class="form-control" id="file" name="file">
+    {{#if profile.photo}}
+      <img src="/uploads/{{profile.photo}}" alt="Profile Photo" style="height: 100px; object-fit: cover;">
+    {{/if}}
+  </div>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+  <a href="/client/home" class="btn btn-secondary">Volver</a>
+</form>

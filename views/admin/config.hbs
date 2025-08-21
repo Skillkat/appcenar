@@ -1,0 +1,8 @@
+<h2>Mantenimiento de Configuración</h2>
+<form action="/admin/config" method="POST">
+  <div class="mb-3">
+    <label for="itbis" class="form-label">ITBIS (%)</label>
+    <input type="number" class="form-control" id="itbis" name="itbis" value="{{config.itbis}}" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+</form>

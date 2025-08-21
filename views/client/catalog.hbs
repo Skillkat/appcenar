@@ -1,0 +1,55 @@
+<h2>Catálogo de {{commerce.name}}</h2>
+<div class="row">
+  <div class="col-md-8">
+    {{#each categories}}
+      <h3>{{this.name}}</h3>
+      <div class="row">
+        {{#each ../products}}
+          {{#if (eq this.categoryId ../id)}}
+            <div class="col-md-4 mb-3">
+              <div class="card">
+                {{#if this.photo}}
+                  <img src="/uploads/{{this.photo}}" class="card-img-top" alt="{{this.name}}" style="height: 100px; object-fit: cover;">
+                {{/if}}
+                <div class="card-body">
+                  <h5 class="card-title">{{this.name}}</h5>
+                  <p class="card-text">{{this.description}}</p>
+                  <p class="card-text">RD$ {{this.price}}</p>
+                  {{#unless (lookup ../cart this.id)}}
+                    <form action="/client/catalog/{{../commerce.id}}/add-to-cart" method="POST">
+                      <input type="hidden" name="productId" value="{{this.id}}">
+                      <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
+                    </form>
+                  {{/unless}}
+                </div>
+              </div>
+            </div>
+          {{/if}}
+        {{/each}}
+      </div>
+    {{/each}}
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Mi Pedido</h5>
+        {{#each cart}}
+          <div class="d-flex justify-content-between">
+            <span>{{this.name}}</span>
+            <span>RD$ {{this.price}}</span>
+            <form action="/client/catalog/{{../commerce.id}}/remove-from-cart" method="POST">
+              <input type="hidden" name="productId" value="{{this.productId}}">
+              <button type="submit" class="btn btn-sm btn-danger">Quitar</button>
+            </form>
+          </div>
+        {{/each}}
+        <hr>
+        <p><strong>Subtotal:</strong> RD$ {{cart.reduce (sum, item) => sum + item.price, 0}}</p>
+        {{#if cart.length}}
+          <a href="/client/select-address/{{commerce.id}}" class="btn btn-primary">Continuar</a>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+<a href="/client/commerce-list/{{commerce.commerceTypeId}}" class="btn btn-secondary">Volver</a>

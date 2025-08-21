@@ -1,0 +1,13 @@
+<h2>{{#if category.id}}Editar{{else}}Nueva{{/if}} Categoría</h2>
+<form action="{{#if category.id}}/commerce/category/edit/{{category.id}}{{else}}/commerce/category/new{{/if}}" method="POST">
+  <div class="mb-3">
+    <label for="name" class="form-label">Nombre</label>
+    <input type="text" class="form-control" id="name" name="name" value="{{category.name}}" required>
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Descripción</label>
+    <textarea class="form-control" id="description" name="description" required>{{category.description}}</textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+  <a href="/commerce/categories" class="btn btn-secondary">Volver</a>
+</form>

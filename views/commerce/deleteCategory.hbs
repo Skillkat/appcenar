@@ -1,0 +1,6 @@
+<h2>Eliminar Categoría</h2>
+<p>¿Está seguro que desea eliminar esta categoría: {{category.name}}?</p>
+<form action="/commerce/category/delete/{{category.id}}" method="POST">
+  <button type="submit" class="btn btn-danger">Aceptar</button>
+  <a href="/commerce/categories" class="btn btn-secondary">Cancelar</a>
+</form>

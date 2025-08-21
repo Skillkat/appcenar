@@ -1,0 +1,49 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h2>Registro de Comercio</h2>
+    <form action="/auth/register-commerce" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nombre del Comercio</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{name}}" required>
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Teléfono</label>
+        <input type="text" class="form-control" id="phone" name="phone" value="{{phone}}" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{email}}" required>
+      </div>
+      <div class="mb-3">
+        <label for="file" class="form-label">Logo del Comercio</label>
+        <input type="file" class="form-control" id="file" name="file">
+      </div>
+      <div class="mb-3">
+        <label for="openHour" class="form-label">Hora de Apertura</label>
+        <input type="time" class="form-control" id="openHour" name="openHour" value="{{openHour}}" required>
+      </div>
+      <div class="mb-3">
+        <label for="closeHour" class="form-label">Hora de Cierre</label>
+        <input type="time" class="form-control" id="closeHour" name="closeHour" value="{{closeHour}}" required>
+      </div>
+      {{!-- <div class="mb-3">
+        <label for="commerceTypeId" class="form-label">Tipo de Comercio</label>
+        <select class="form-select" id="commerceTypeId" name="commerceTypeId" required>
+          {{#each CommerceTypes}}
+            <option value="{{this.id}}" {{#if (eq ../commerceTypeId this.id)}}selected{{/if}}>{{this.name}}</option>
+          {{/each}}
+        </select>
+      </div> --}}
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+      </div>
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Registrarse</button>
+      <a href="/auth/login" class="btn btn-secondary">Volver</a>
+    </form>
+  </div>
+</div>
