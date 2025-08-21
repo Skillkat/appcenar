@@ -1,20 +1,35 @@
-<h2>Mis Pedidos</h2>
-<div class="row">
-  {{#each orders}}
-    <div class="col-md-4 mb-3">
-      <div class="card">
-        {{#if this.Commerce.logo}}
-          <img src="/uploads/{{this.Commerce.logo}}" class="card-img-top" alt="{{this.Commerce.name}}" style="height: 100px; object-fit: cover;">
-        {{/if}}
-        <div class="card-body">
-          <h5 class="card-title">{{this.Commerce.name}}</h5>
-          <p class="card-text">Estado: {{this.status}}</p>
-          <p class="card-text">Total: RD$ {{this.total}}</p>
-          <p class="card-text">Productos: {{this.OrderProducts.length}}</p>
-          <p class="card-text">Fecha: {{this.createdAt}}</p>
-          <a href="/delivery/order/{{this.id}}" class="btn btn-primary">Ver Detalle</a>
-        </div>
-      </div>
-    </div>
-  {{/each}}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2>Bienvenido, {{deliveryProfile.firstName}} {{deliveryProfile.lastName}}</h2>
+    <p>Teléfono: {{deliveryProfile.phone}}</p>
+    
+    <h3>Comercios Disponibles</h3>
+    {{#if commerces}}
+      <ul>
+        {{#each commerces}}
+          <li>{{this.name}} ({{this.CommerceType.name}})</li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p>No hay comercios disponibles.</p>
+    {{/if}}
+    
+    <h3>Tus Pedidos</h3>
+    {{#if orders}}
+      <ul>
+        {{#each orders}}
+          <li>
+            Pedido #{{this.id}} de {{this.Commerce.name}}
+            <ul>
+              {{#each OrderProducts}}
+                <li>{{this.Product.name}}</li>
+              {{/each}}
+            </ul>
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p>No tienes pedidos asignados.</p>
+    {{/if}}
+  </div>
 </div>
