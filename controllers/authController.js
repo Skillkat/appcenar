@@ -1,60 +1,57 @@
-const { User, ClientProfile, DeliveryProfile, CommerceProfile, CommerceType } = require('../models');
+const { User, ClientProfile, DeliveryProfile, CommerceProfile } = require('../models');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const sendEmail = require('../utils/email');
-const { Op } = require('sequelize'); // Asegúrate de que esta línea esté presente
+const { Op } = require('sequelize');
 
 exports.getLogin = (req, res) => {
-  console.log('GET /auth/login called');
-  if (req.session.userId) {
-    console.log('User already logged in, redirecting to:', `/${req.session.role}/home`);
-    return res.redirect(`/${req.session.role}/home`);
-  }
-  res.render('auth/login', { errors: [], bodyMenu: '' });
-};
-
-exports.postLogin = async (req, res, next) => {
-  try {
-    console.log('POST /auth/login called with:', req.body);
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.log('Validation errors:', errors.array());
-      return res.render('auth/login', { errors: errors.array(), bodyMenu: '' });
+    console.log('GET /auth/login called');
+    if (req.session.userId) {
+      console.log('User already logged in, redirecting to:', `/${req.session.role}/home`);
+      return res.redirect(`/${req.session.role}/home`);
     }
-    const { emailOrUsername, password } = req.body;
-    console.log('Searching for user with emailOrUsername:', emailOrUsername);
-    const user = await User.findOne({ where: { [Op.or]: [{ email: emailOrUsername }, { username: emailOrUsername }] } });
-    if (!user) {
-      console.log('User not found for:', emailOrUsername);
-      return res.render('auth/login', { errors: [{ msg: 'Invalid credentials' }], bodyMenu: '' });
+    res.render('auth/login', { errors: [], bodyMenu: '' });
+  };
+  
+  exports.postLogin = async (req, res, next) => {
+    try {
+      console.log('POST /auth/login called with:', req.body);
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        console.log('Validation errors:', errors.array());
+        return res.render('auth/login', { errors: errors.array(), bodyMenu: '' });
+      }
+      const { emailOrUsername, password } = req.body;
+      console.log('Searching for user with emailOrUsername:', emailOrUsername);
+      const user = await User.findOne({ where: { [Op.or]: [{ email: emailOrUsername }, { username: emailOrUsername }] } });
+      if (!user) {
+        console.log('User not found for:', emailOrUsername);
+        return res.render('auth/login', { errors: [{ msg: 'Invalid credentials' }], bodyMenu: '' });
+      }
+      console.log('User found:', { id: user.id, username: user.username, role: user.role });
+      const isValidPassword = await user.validPassword(password);
+      console.log('Password valid:', isValidPassword);
+      if (!isValidPassword) {
+        console.log('Invalid password for user:', user.id);
+        return res.render('auth/login', { errors: [{ msg: 'Invalid credentials' }], bodyMenu: '' });
+      }
+      if (!user.active) {
+        console.log('Account inactive for user:', user.id);
+        return res.render('auth/login', { errors: [{ msg: 'Account inactive. Check email or contact admin.' }], bodyMenu: '' });
+      }
+      req.session.userId = user.id;
+      req.session.role = user.role;
+      console.log('Session set:', { userId: user.id, role: user.role });
+      res.redirect(`/${user.role}/home`);
+    } catch (error) {
+      console.error('Error in postLogin:', error);
+      next(error);
     }
-    console.log('User found:', { id: user.id, username: user.username, role: user.role });
-    const isValidPassword = await user.validPassword(password);
-    console.log('Password valid:', isValidPassword);
-    if (!isValidPassword) {
-      console.log('Invalid password for user:', user.id);
-      return res.render('auth/login', { errors: [{ msg: 'Invalid credentials' }], bodyMenu: '' });
-    }
-    if (!user.active) {
-      console.log('Account inactive for user:', user.id);
-      return res.render('auth/login', { errors: [{ msg: 'Account inactive. Check email or contact admin.' }], bodyMenu: '' });
-    }
-    req.session.userId = user.id;
-    req.session.role = user.role;
-    console.log('Session set:', { userId: user.id, role: user.role });
-    res.redirect(`/${user.role}/home`);
-  } catch (error) {
-    console.error('Error in postLogin:', error);
-    next(error);
-  }
-};
-
-// ... resto del archivo igual (getRegisterClientDelivery, postRegisterClientDelivery, etc.)
+  };
 exports.getRegisterClientDelivery = async (req, res) => {
   try {
-    const commerceTypes = await CommerceType.findAll();
-    res.render('auth/registerClientDelivery', { errors: [], commerceTypes, bodyMenu: '' });
+    res.render('auth/registerClientDelivery', { errors: [], bodyMenu: '' });
   } catch (error) {
     console.error('Error in getRegisterClientDelivery:', error);
     res.status(500).render('error', { error: 'Something went wrong!', bodyMenu: '' });
@@ -65,14 +62,12 @@ exports.postRegisterClientDelivery = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const commerceTypes = await CommerceType.findAll();
-      return res.render('auth/registerClientDelivery', { errors: errors.array(), commerceTypes, bodyMenu: '' });
+      return res.render('auth/registerClientDelivery', { errors: errors.array(), bodyMenu: '' });
     }
     const { firstName, lastName, phone, email, username, role, password } = req.body;
     const existingUser = await User.findOne({ where: { [Op.or]: [{ email }, { username }] } });
     if (existingUser) {
-      const commerceTypes = await CommerceType.findAll();
-      return res.render('auth/registerClientDelivery', { errors: [{ msg: 'Email or username already exists' }], commerceTypes, bodyMenu: '' });
+      return res.render('auth/registerClientDelivery', { errors: [{ msg: 'Email or username already exists' }], bodyMenu: '' });
     }
     const user = await User.create({ email, username, password, role, activationToken: uuidv4() });
     const photo = req.file ? req.file.filename : null;
@@ -91,8 +86,11 @@ exports.postRegisterClientDelivery = async (req, res) => {
 
 exports.getRegisterCommerce = async (req, res) => {
   try {
-    const commerceTypes = await CommerceType.findAll();
-    res.render('auth/registerCommerce', { errors: [], commerceTypes, bodyMenu: '' });
+    res.render('auth/registerCommerce', {
+      user: {},
+      errors: [],
+      bodyMenu: ''
+    });
   } catch (error) {
     console.error('Error in getRegisterCommerce:', error);
     res.status(500).render('error', { error: 'Something went wrong!', bodyMenu: '' });
@@ -100,26 +98,64 @@ exports.getRegisterCommerce = async (req, res) => {
 };
 
 exports.postRegisterCommerce = async (req, res) => {
+  console.log('POST /auth/register-commerce received:', JSON.stringify(req.body, null, 2));
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log('Validation errors:', JSON.stringify(errors.array(), null, 2));
+    return res.render('auth/registerCommerce', {
+      user: req.body,
+      errors: errors.array(),
+      bodyMenu: ''
+    });
+  }
+
+  const { name, phone, email, openHour, closeHour, password, confirmPassword } = req.body;
+
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const commerceTypes = await CommerceType.findAll();
-      return res.render('auth/registerCommerce', { errors: errors.array(), commerceTypes, bodyMenu: '' });
+    // Validar que las contraseñas coincidan
+    if (password !== confirmPassword) {
+      return res.render('auth/registerCommerce', {
+        user: req.body,
+        errors: [{ msg: 'Passwords do not match' }],
+        bodyMenu: ''
+      });
     }
-    const { name, phone, email, openHour, closeHour, commerceTypeId, password } = req.body;
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      const commerceTypes = await CommerceType.findAll();
-      return res.render('auth/registerCommerce', { errors: [{ msg: 'Email already exists' }], commerceTypes, bodyMenu: '' });
-    }
-    const user = await User.create({ email, password, role: 'commerce', activationToken: uuidv4() });
-    const logo = req.file ? req.file.filename : null;
-    await CommerceProfile.create({ userId: user.id, name, phone, logo, openHour, closeHour, commerceTypeId });
-    await sendEmail(user.email, 'Activate Account', `<a href="${process.env.APP_URL}/auth/activate/${user.activationToken}">Activate</a>`);
-    res.render('auth/login', { errors: [{ msg: 'Registration successful. Check email to activate.' }], bodyMenu: '' });
+
+    // Crear usuario con rol 'commerce'
+    const user = await User.create({
+      username: name,
+      email,
+      password,
+      role: 'commerce',
+      active: false,
+      activationToken: require('crypto').randomBytes(20).toString('hex')
+    });
+
+    // Crear perfil del comercio
+    console.log('Creating CommerceProfile with:', {
+      userId: user.id,
+      name,
+      phone,
+      openHour,
+      closeHour
+    });
+    await CommerceProfile.create({
+      userId: user.id,
+      name,
+      phone,
+      openHour,
+      closeHour,
+      logo: req.file ? req.file.filename : null
+    });
+
+    res.redirect('/auth/login');
   } catch (error) {
     console.error('Error in postRegisterCommerce:', error);
-    res.status(500).render('error', { error: 'Something went wrong!', bodyMenu: '' });
+    res.render('auth/registerCommerce', {
+      user: req.body,
+      errors: [{ msg: error.message || 'Registration failed' }],
+      bodyMenu: ''
+    });
   }
 };
 

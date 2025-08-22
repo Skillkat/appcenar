@@ -1,55 +1,54 @@
-<h2>Catálogo de {{commerce.name}}</h2>
-<div class="row">
-  <div class="col-md-8">
-    {{#each categories}}
-      <h3>{{this.name}}</h3>
-      <div class="row">
-        {{#each ../products}}
-          {{#if (eq this.categoryId ../id)}}
-            <div class="col-md-4 mb-3">
-              <div class="card">
-                {{#if this.photo}}
-                  <img src="/uploads/{{this.photo}}" class="card-img-top" alt="{{this.name}}" style="height: 100px; object-fit: cover;">
-                {{/if}}
-                <div class="card-body">
-                  <h5 class="card-title">{{this.name}}</h5>
-                  <p class="card-text">{{this.description}}</p>
-                  <p class="card-text">RD$ {{this.price}}</p>
-                  {{#unless (lookup ../cart this.id)}}
-                    <form action="/client/catalog/{{../commerce.id}}/add-to-cart" method="POST">
-                      <input type="hidden" name="productId" value="{{this.id}}">
-                      <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
-                    </form>
-                  {{/unless}}
+<div class="container">
+  <h2>Catálogo de {{commerce.name}}</h2>
+  {{#if cartMessage}}
+    <div class="alert alert-success">{{cartMessage}}</div>
+  {{/if}}
+  {{#each categories}}
+    <div class="category">
+      <h3>{{name}}</h3>
+      {{#if Products.length}}
+        <div class="products">
+          {{#each Products}}
+            <div class="product">
+              {{#if photo}}
+                <img src="/Uploads/{{photo}}" alt="{{name}}" style="width: 100px; height: 100px; object-fit: cover;">
+              {{else}}
+                <p>Sin imagen</p>
+              {{/if}}
+              <h4>{{name}}</h4>
+              <p>{{description}}</p>
+              <p>RD$ {{price}}</p>
+              <form action="/client/catalog/{{../../commerce.id}}/add-to-cart" method="POST">
+                <input type="hidden" name="productId" value="{{id}}">
+                <div class="mb-3">
+                  <label for="quantity-{{id}}" class="form-label">Cantidad</label>
+                  <input type="number" class="form-control" id="quantity-{{id}}" name="quantity" value="1" min="1" required style="width: 100px;">
                 </div>
-              </div>
+                <button type="submit" class="btn btn-primary">Añadir al Carrito</button>
+              </form>
             </div>
-          {{/if}}
-        {{/each}}
-      </div>
-    {{/each}}
-  </div>
-  <div class="col-md-4">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Mi Pedido</h5>
-        {{#each cart}}
-          <div class="d-flex justify-content-between">
-            <span>{{this.name}}</span>
-            <span>RD$ {{this.price}}</span>
-            <form action="/client/catalog/{{../commerce.id}}/remove-from-cart" method="POST">
-              <input type="hidden" name="productId" value="{{this.productId}}">
-              <button type="submit" class="btn btn-sm btn-danger">Quitar</button>
-            </form>
-          </div>
-        {{/each}}
-        <hr>
-        <p><strong>Subtotal:</strong> RD$ {{cart.reduce (sum, item) => sum + item.price, 0}}</p>
-        {{#if cart.length}}
-          <a href="/client/select-address/{{commerce.id}}" class="btn btn-primary">Continuar</a>
-        {{/if}}
-      </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <p>No hay productos en esta categoría.</p>
+      {{/if}}
     </div>
-  </div>
+  {{else}}
+    <p>No hay categorías disponibles.</p>
+  {{/each}}
+  {{#if cart.length}}
+    <div class="cart">
+      <h3>Carrito</h3>
+      <ul>
+        {{#each cart}}
+          <li>{{name}} - Cantidad: {{quantity}} - RD$ {{price}} x {{quantity}} = RD$ {{multiply price quantity}}</li>
+          <form action="/client/catalog/{{../commerce.id}}/remove-from-cart" method="POST" style="display:inline;">
+            <input type="hidden" name="productId" value="{{productId}}">
+            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+          </form>
+        {{/each}}
+      </ul>
+      <a href="/client/select-address/{{commerce.id}}" class="btn btn-success">Confirmar Pedido</a>
+    </div>
+  {{/if}}
 </div>
-<a href="/client/commerce-list/{{commerce.commerceTypeId}}" class="btn btn-secondary">Volver</a>

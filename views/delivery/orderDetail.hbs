@@ -1,24 +1,30 @@
-<h2>Mi Perfil</h2>
-<form action="/delivery/profile" method="POST" enctype="multipart/form-data">
-  <div class="mb-3">
-    <label for="firstName" class="form-label">Nombre</label>
-    <input type="text" class="form-control" id="firstName" name="firstName" value="{{profile.firstName}}" required>
-  </div>
-  <div class="mb-3">
-    <label for="lastName" class="form-label">Apellido</label>
-    <input type="text" class="form-control" id="lastName" name="lastName" value="{{profile.lastName}}" required>
-  </div>
-  <div class="mb-3">
-    <label for="phone" class="form-label">Teléfono</label>
-    <input type="text" class="form-control" id="phone" name="phone" value="{{profile.phone}}" required>
-  </div>
-  <div class="mb-3">
-    <label for="file" class="form-label">Foto de Perfil</label>
-    <input type="file" class="form-control" id="file" name="file">
-    {{#if profile.photo}}
-      <img src="/uploads/{{profile.photo}}" alt="Profile Photo" style="height: 100px; object-fit: cover;">
-    {{/if}}
-  </div>
-  <button type="submit" class="btn btn-primary">Guardar</button>
+<div class="container">
+  <h2>Detalles del Pedido #{{order.id}}</h2>
+  <p>Comercio: {{order.Commerce.name}}</p>
+  <p>Estado: {{order.status}}</p>
+  <p>Dirección: {{order.Address.name}} - {{order.Address.description}}</p>
+  <p>Subtotal: RD$ {{order.subtotal}}</p>
+  <p>ITBIS (18%): RD$ {{order.itbisAmount}}</p>
+  <p>Total: RD$ {{order.total}}</p>
+  <h3>Productos</h3>
+  {{#if order.OrderProducts}}
+    <ul>
+      {{#each order.OrderProducts}}
+        <li>{{this.Product.name}} (Cantidad: {{this.quantity}}, Precio: RD$ {{this.price}})</li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>No hay productos en este pedido.</p>
+  {{/if}}
+  {{#if_eq order.status 'pending'}}
+    <form action="/delivery/order/{{order.id}}/accept" method="POST">
+      <button type="submit" class="btn btn-primary">Aceptar Pedido</button>
+    </form>
+  {{/if_eq}}
+  {{#if_eq order.status 'in_process'}}
+    <form action="/delivery/order/{{order.id}}/complete" method="POST">
+      <button type="submit" class="btn btn-success">Completar Pedido</button>
+    </form>
+  {{/if_eq}}
   <a href="/delivery/home" class="btn btn-secondary">Volver</a>
-</form>
+</div>

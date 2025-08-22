@@ -1,20 +1,23 @@
-<h2>Mis Pedidos</h2>
-<div class="row">
-  {{#each orders}}
-    <div class="col-md-4 mb-3">
-      <div class="card">
-        {{#if this.Commerce.logo}}
-          <img src="/uploads/{{this.Commerce.logo}}" class="card-img-top" alt="{{this.Commerce.name}}" style="height: 100px; object-fit: cover;">
-        {{/if}}
-        <div class="card-body">
-          <h5 class="card-title">{{this.Commerce.name}}</h5>
-          <p class="card-text">Estado: {{this.status}}</p>
-          <p class="card-text">Total: RD$ {{this.total}}</p>
-          <p class="card-text">Productos: {{this.OrderProducts.length}}</p>
-          <p class="card-text">Fecha: {{this.createdAt}}</p>
-          <a href="/client/order/{{this.id}}" class="btn btn-primary">Ver Detalle</a>
+<div class="container">
+  <h2>Mis Pedidos</h2>
+  {{#if orders}}
+    <div class="row">
+      {{#each orders}}
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Pedido #{{this.id}}</h5>
+              <p class="card-text">Comercio: {{this.Commerce.name}}</p>
+              <p class="card-text">Estado: {{this.status}}</p>
+              <p class="card-text">Total: RD$ {{this.total}}</p>
+              <p class="card-text">Fecha: {{this.createdAt}}</p>
+              <a href="/client/order/{{this.id}}" class="btn btn-primary">Ver Detalles</a>
+            </div>
+          </div>
         </div>
-      </div>
+      {{/each}}
     </div>
-  {{/each}}
+  {{else}}
+    <p>No tienes pedidos.</p>
+  {{/if}}
 </div>

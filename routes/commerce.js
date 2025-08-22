@@ -4,6 +4,19 @@ const commerceController = require('../controllers/commerceController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const roleMiddleware = require('../middlewares/roleMiddleware');
 const { check } = require('express-validator');
+const multer = require('multer');
+const path = require('path');
+
+// Configuración de Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
 
 router.use(authMiddleware);
 router.use(roleMiddleware(['commerce']));
@@ -31,14 +44,14 @@ router.get('/category/delete/:id', commerceController.getDeleteCategory);
 router.post('/category/delete/:id', commerceController.postDeleteCategory);
 router.get('/products', commerceController.getProducts);
 router.get('/product/new', commerceController.getNewProduct);
-router.post('/product/new', [
+router.post('/product/new', upload.single('file'), [
   check('name').notEmpty().withMessage('Name is required'),
   check('description').notEmpty().withMessage('Description is required'),
   check('price').isFloat({ min: 0 }).withMessage('Valid price is required'),
   check('categoryId').notEmpty().withMessage('Category is required')
 ], commerceController.postNewProduct);
 router.get('/product/edit/:id', commerceController.getEditProduct);
-router.post('/product/edit/:id', [
+router.post('/product/edit/:id', upload.single('file'), [
   check('name').notEmpty().withMessage('Name is required'),
   check('description').notEmpty().withMessage('Description is required'),
   check('price').isFloat({ min: 0 }).withMessage('Valid price is required'),

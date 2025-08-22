@@ -1,20 +1,31 @@
-<h2>Pedidos</h2>
-<div class="row">
-  {{#each orders}}
-    <div class="col-md-4 mb-3">
-      <div class="card">
-        {{#if this.Commerce.logo}}
-          <img src="/uploads/{{this.Commerce.logo}}" class="card-img-top" alt="{{this.Commerce.name}}" style="height: 100px; object-fit: cover;">
-        {{/if}}
-        <div class="card-body">
-          <h5 class="card-title">{{this.Commerce.name}}</h5>
-          <p class="card-text">Estado: {{this.status}}</p>
-          <p class="card-text">Total: RD$ {{this.total}}</p>
-          <p class="card-text">Productos: {{this.OrderProducts.length}}</p>
-          <p class="card-text">Fecha: {{this.createdAt}}</p>
-          <a href="/commerce/order/{{this.id}}" class="btn btn-primary">Ver Detalle</a>
+<div class="container">
+  <h2>Comercios Disponibles</h2>
+  <form action="/client/commerce-list" method="GET" class="mb-3">
+    <div class="input-group">
+      <input type="text" name="search" class="form-control" placeholder="Buscar comercios..." value="{{search}}">
+      <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+  </form>
+  <div class="row">
+    {{#each commerces}}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          {{#if this.logo}}
+            <img src="/uploads/{{this.logo}}" class="card-img-top" alt="{{this.name}}" onerror="this.style.display='none';">
+          {{else}}
+            <div class="card-img-top" style="height: 200px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+              <span>Sin imagen</span>
+            </div>
+          {{/if}}
+          <div class="card-body">
+            <h5 class="card-title">{{this.name}}</h5>
+            <p class="card-text">Horario: {{this.openHour}} - {{this.closeHour}}</p>
+            <a href="/client/catalog/{{this.id}}" class="btn btn-primary">Ver Catálogo</a>
+          </div>
         </div>
       </div>
-    </div>
-  {{/each}}
+    {{else}}
+      <p>No se encontraron comercios.</p>
+    {{/each}}
+  </div>
 </div>

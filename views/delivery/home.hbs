@@ -2,29 +2,63 @@
   <div class="col-md-8">
     <h2>Bienvenido, {{deliveryProfile.firstName}} {{deliveryProfile.lastName}}</h2>
     <p>Teléfono: {{deliveryProfile.phone}}</p>
+    {{#if deliveryProfile.photo}}
+      <img src="/uploads/{{deliveryProfile.photo}}" alt="Profile Photo" style="height: 100px; object-fit: cover;">
+    {{/if}}
     
     <h3>Comercios Disponibles</h3>
     {{#if commerces}}
       <ul>
         {{#each commerces}}
-          <li>{{this.name}} ({{this.CommerceType.name}})</li>
+          <li>{{this.name}} - {{this.phone}} ({{this.openHour}} - {{this.closeHour}})</li>
         {{/each}}
       </ul>
     {{else}}
       <p>No hay comercios disponibles.</p>
     {{/if}}
     
-    <h3>Tus Pedidos</h3>
-    {{#if orders}}
+    <h3>Pedidos Nuevos</h3>
+    {{#if newOrders}}
       <ul>
-        {{#each orders}}
+        {{#each newOrders}}
           <li>
             Pedido #{{this.id}} de {{this.Commerce.name}}
             <ul>
               {{#each OrderProducts}}
-                <li>{{this.Product.name}}</li>
+                <li>{{this.Product.name}} (Cantidad: {{this.quantity}}, Precio: RD$ {{this.price}})</li>
               {{/each}}
             </ul>
+            <p>Dirección: {{this.Address.name}} - {{this.Address.description}}</p>
+            <p>Total: RD$ {{this.total}}</p>
+            <form action="/delivery/order/{{this.id}}/accept" method="POST">
+              <button type="submit" class="btn btn-primary">Aceptar Pedido</button>
+            </form>
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p>No hay pedidos nuevos disponibles.</p>
+    {{/if}}
+    
+    <h3>Tus Pedidos Asignados</h3>
+    {{#if orders}}
+      <ul>
+        {{#each orders}}
+          <li>
+            Pedido #{{this.id}} de {{this.Commerce.name}} (Estado: {{this.status}})
+            <ul>
+              {{#each OrderProducts}}
+                <li>{{this.Product.name}} (Cantidad: {{this.quantity}}, Precio: RD$ {{this.price}})</li>
+              {{/each}}
+            </ul>
+            <p>Dirección: {{this.Address.name}} - {{this.Address.description}}</p>
+            <p>Total: RD$ {{this.total}}</p>
+            <a href="/delivery/order/{{this.id}}" class="btn btn-primary">Ver Detalles</a>
+            {{#if_eq this.status 'in_process'}}
+              <form action="/delivery/order/{{this.id}}/complete" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-success">Completar Pedido</button>
+              </form>
+            {{/if_eq}}
           </li>
         {{/each}}
       </ul>

@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const deliveryController = require('../controllers/deliveryController');
@@ -17,6 +16,7 @@ router.post('/profile', [
   check('phone').notEmpty().withMessage('Phone is required')
 ], deliveryController.postProfile);
 router.get('/order/:id', deliveryController.getOrderDetail);
+router.post('/order/:id/accept', deliveryController.acceptOrder);
 router.post('/order/:id/complete', deliveryController.completeOrder);
 
 module.exports = router;

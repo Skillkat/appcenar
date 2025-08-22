@@ -1,27 +1,43 @@
-<h2>Comercios</h2>
-<p>{{commerces.length}} comercios encontrados</p>
-<form action="/client/commerce-list/{{typeId}}" method="GET" class="mb-3">
-  <div class="input-group">
-    <input type="text" class="form-control" name="search" placeholder="Buscar por nombre">
-    <button type="submit" class="btn btn-primary">Buscar</button>
-  </div>
-</form>
-<div class="row">
-  {{#each commerces}}
-    <div class="col-md-4 mb-3">
-      <div class="card">
-        {{#if this.logo}}
-          <img src="/uploads/{{this.logo}}" class="card-img-top" alt="{{this.name}}" style="height: 100px; object-fit: cover;">
-        {{/if}}
-        <div class="card-body">
-          <h5 class="card-title">{{this.name}}</h5>
-          <form action="/client/favorite/{{this.id}}" method="POST">
-            <button type="submit" class="btn btn-outline-danger">{{#if (lookup ../favorites this.id)}}♥{{else}}♡{{/if}}</button>
-          </form>
-          <a href="/client/catalog/{{this.id}}" class="btn btn-primary">Ver Catálogo</a>
-        </div>
-      </div>
-    </div>
-  {{/each}}
-</div>
-<a href="/client/home" class="btn btn-secondary">Volver</a>
+<div class="container">
+     <h2>Lista de Comercios</h2>
+     <form action="/client/commerce-list" method="GET" class="mb-3">
+       <div class="input-group">
+         <input type="text" name="search" class="form-control" placeholder="Buscar comercios..." value="{{search}}">
+         <button type="submit" class="btn btn-primary">Buscar</button>
+       </div>
+     </form>
+     <div class="row">
+       {{#each commerces}}
+         <div class="col-md-4 mb-3">
+           <div class="card">
+             <img src="/uploads/{{this.logo}}" class="card-img-top" alt="{{this.name}}" onerror="this.src='/images/default.jpg'">
+             <div class="card-body">
+               <h5 class="card-title">{{this.name}}</h5>
+               <p class="card-text">Horario: {{this.openHour}} - {{this.closeHour}}</p>
+               <a href="/client/catalog/{{this.id}}" class="btn btn-primary">Ver Catálogo</a>
+               {{#if ../favorites}}
+                 {{#each ../favorites}}
+                   {{#if (eq this.commerceId ../this.id)}}
+                     <form action="/client/unfavorite/{{../this.id}}" method="POST" class="d-inline">
+                       <button type="submit" class="btn btn-danger">Quitar Favorito</button>
+                     </form>
+                   {{/if}}
+                 {{/each}}
+                 {{#unless (lookup ../favorites 'commerceId' this.id)}}
+                   <form action="/client/favorite/{{this.id}}" method="POST" class="d-inline">
+                     <button type="submit" class="btn btn-success">Añadir Favorito</button>
+                   </form>
+                 {{/unless}}
+               {{else}}
+                 <form action="/client/favorite/{{this.id}}" method="POST" class="d-inline">
+                   <button type="submit" class="btn btn-success">Añadir Favorito</button>
+                 </form>
+               {{/if}}
+             </div>
+           </div>
+         </div>
+       {{else}}
+         <p>No se encontraron comercios.</p>
+       {{/each}}
+     </div>
+   </div>

@@ -1,16 +1,36 @@
-<h2>Tipos de Comercios</h2>
-<div class="row">
-  {{#each commerceTypes}}
-    <div class="col-md-4 mb-3">
-      <div class="card">
-        {{#if this.icon}}
-          <img src="/uploads/{{this.icon}}" class="card-img-top" alt="{{this.name}}" style="height: 100px; object-fit: cover;">
-        {{/if}}
-        <div class="card-body">
-          <h5 class="card-title">{{this.name}}</h5>
-          <a href="/client/commerce-list/{{this.id}}" class="btn btn-primary">comercios</a>
+
+<div class="container">
+  <h2>Comercios Disponibles</h2>
+  <form action="/client/commerce-list" method="GET" class="mb-3">
+    <div class="input-group">
+      <input type="text" name="search" class="form-control" placeholder="Buscar comercios..." value="{{search}}">
+      <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+  </form>
+  <div class="row">
+    {{#each commerces}}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          {{#if logo}}
+            <img src="/uploads/{{logo}}" class="card-img-top" alt="{{name}}" onerror="this.style.display='none';">
+          {{else}}
+            <div class="card-img-top" style="height: 200px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+              <span>Sin imagen</span>
+            </div>
+          {{/if}}
+          <div class="card-body">
+            <h5 class="card-title">{{name}}</h5>
+            <p class="card-text">
+              Horario: 
+              {{#if openHour}}{{openHour}}{{else}}No disponible{{/if}} - 
+              {{#if closeHour}}{{closeHour}}{{else}}No disponible{{/if}}
+            </p>
+            <a href="/client/catalog/{{id}}" class="btn btn-primary">Ver Catálogo</a>
+          </div>
         </div>
       </div>
-    </div>
-  {{/each}}
+    {{else}}
+      <p>No se encontraron comercios.</p>
+    {{/each}}
+  </div>
 </div>

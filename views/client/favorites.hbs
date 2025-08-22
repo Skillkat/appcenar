@@ -1,19 +1,24 @@
-<h2>Mis Favoritos</h2>
-<div class="row">
-  {{#each favorites}}
-    <div class="col-md-4 mb-3">
-      <div class="card">
-        {{#if this.Commerce.logo}}
-          <img src="/uploads/{{this.Commerce.logo}}" class="card-img-top" alt="{{this.Commerce.name}}" style="height: 100px; object-fit: cover;">
-        {{/if}}
-        <div class="card-body">
-          <h5 class="card-title">{{this.Commerce.name}}</h5>
-          <form action="/client/unfavorite/{{this.commerceId}}" method="POST">
-            <button type="submit" class="btn btn-outline-danger">Quitar de Favoritos</button>
-          </form>
-          <a href="/client/catalog/{{this.commerceId}}" class="btn btn-primary">Ver Catálogo</a>
-        </div>
-      </div>
-    </div>
-  {{/each}}
-</div>
+<div class="container">
+     <h2>Mis Favoritos</h2>
+     {{#if favorites}}
+       <div class="row">
+         {{#each favorites}}
+           <div class="col-md-6 mb-3">
+             <div class="card">
+               <img src="/uploads/{{this.Commerce.logo}}" class="card-img-top" alt="{{this.Commerce.name}}" onerror="this.src='/images/default.jpg'">
+               <div class="card-body">
+                 <h5 class="card-title">{{this.Commerce.name}}</h5>
+                 <p class="card-text">Horario: {{this.Commerce.openHour}} - {{this.Commerce.closeHour}}</p>
+                 <a href="/client/catalog/{{this.commerceId}}" class="btn btn-primary">Ver Catálogo</a>
+                 <form action="/client/unfavorite/{{this.commerceId}}" method="POST" class="d-inline">
+                   <button type="submit" class="btn btn-danger">Quitar Favorito</button>
+                 </form>
+               </div>
+             </div>
+           </div>
+         {{/each}}
+       </div>
+     {{else}}
+       <p>No tienes comercios favoritos.</p>
+     {{/if}}
+   </div>

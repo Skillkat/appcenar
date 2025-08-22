@@ -13,11 +13,17 @@ app.engine('hbs', engine({
   extname: '.hbs',
   defaultLayout: 'layout',
   helpers: {
-    eq: function (a, b) {
-      return a === b;
-    }
-  }
+    
+    if_eq: function(a, b, options) {
+        return a === b ? options.fn(this) : options.inverse(this);
+    },
+    multiply: (a, b) => a * b
+}
 }));
+  
+
+  
+
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 

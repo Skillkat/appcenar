@@ -1,32 +1,42 @@
-<h2>{{#if product.id}}Editar{{else}}Nuevo{{/if}} Producto</h2>
-<form action="{{#if product.id}}/commerce/product/edit/{{product.id}}{{else}}/commerce/product/new{{/if}}" method="POST" enctype="multipart/form-data">
-  <div class="mb-3">
-    <label for="name" class="form-label">Nombre</label>
-    <input type="text" class="form-control" id="name" name="name" value="{{product.name}}" required>
-  </div>
-  <div class="mb-3">
-    <label for="description" class="form-label">Descripción</label>
-    <textarea class="form-control" id="description" name="description" required>{{product.description}}</textarea>
-  </div>
-  <div class="mb-3">
-    <label for="price" class="form-label">Precio</label>
-    <input type="number" class="form-control" id="price" name="price" value="{{product.price}}" required>
-  </div>
-  <div class="mb-3">
-    <label for="categoryId" class="form-label">Categoría</label>
-    <select class="form-select" id="categoryId" name="categoryId" required>
-      {{#each categories}}
-        <option value="{{this.id}}" {{#if (eq ../product.categoryId this.id)}}selected{{/if}}>{{this.name}}</option>
+<div class="container">
+  <h2>{{#if product.id}}Editar{{else}}Nuevo{{/if}} Producto</h2>
+  {{#if errors}}
+    <div class="alert alert-danger">
+      {{#each errors}}
+        <p>{{this.msg}}</p>
       {{/each}}
-    </select>
-  </div>
-  <div class="mb-3">
-    <label for="file" class="form-label">Foto</label>
-    <input type="file" class="form-control" id="file" name="file">
-    {{#if product.photo}}
-      <img src="/uploads/{{product.photo}}" alt="Product Photo" style="height: 100px; object-fit: cover;">
-    {{/if}}
-  </div>
-  <button type="submit" class="btn btn-primary">Guardar</button>
-  <a href="/commerce/products" class="btn btn-secondary">Volver</a>
-</form>
+    </div>
+  {{/if}}
+  <form action="{{#if product.id}}/commerce/product/edit/{{product.id}}{{else}}/commerce/product/new{{/if}}" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="name" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="name" name="name" value="{{product.name}}" required>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Descripción</label>
+      <textarea class="form-control" id="description" name="description" required>{{product.description}}</textarea>
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Precio</label>
+      <input type="number" class="form-control" id="price" name="price" value="{{product.price}}" required>
+    </div>
+    <div class="mb-3">
+      <label for="categoryId" class="form-label">Categoría</label>
+      <select class="form-select" id="categoryId" name="categoryId" required>
+        <option value="">Seleccione una categoría</option>
+        {{#each categories}}
+          <option value="{{id}}" {{#if (eq ../product.categoryId id)}}selected{{/if}}>{{name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="file" class="form-label">Foto</label>
+      <input type="file" class="form-control" id="file" name="file">
+      {{#if product.photo}}
+        <img src="/Uploads/{{product.photo}}" alt="Product Photo" style="height: 100px; object-fit: cover;">
+      {{/if}}
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="/commerce/products" class="btn btn-secondary">Volver</a>
+  </form>
+</div>

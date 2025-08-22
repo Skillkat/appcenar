@@ -9,7 +9,6 @@ const CommerceProfile = sequelize.define('CommerceProfile', {
     logo: { type: DataTypes.STRING, allowNull: true },
     openHour: { type: DataTypes.STRING, allowNull: false },
     closeHour: { type: DataTypes.STRING, allowNull: false },
-    commerceTypeId: { type: DataTypes.INTEGER, allowNull: false }
   });
   
   module.exports = CommerceProfile;

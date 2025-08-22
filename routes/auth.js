@@ -3,7 +3,18 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const { check } = require('express-validator');
 const multer = require('multer');
-const upload = multer({ dest: 'public/uploads/' });
+const path = require('path');
+
+// Configuración de Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage });
 
 router.get('/login', authController.getLogin);
 router.post('/login', [
@@ -12,13 +23,7 @@ router.post('/login', [
 ], authController.postLogin);
 
 router.get('/register-client-delivery', authController.getRegisterClientDelivery);
-router.post('/register-client-delivery', upload.single('file'), (req, res, next) => {
-  console.log('POST /auth/register-client-delivery received:', {
-    body: req.body,
-    file: req.file
-  });
-  next();
-}, [
+router.post('/register-client-delivery', upload.single('file'), [
   check('firstName').notEmpty().withMessage('First name is required'),
   check('lastName').notEmpty().withMessage('Last name is required'),
   check('phone').notEmpty().withMessage('Phone is required'),
@@ -36,9 +41,13 @@ router.post('/register-commerce', upload.single('file'), [
   check('email').isEmail().withMessage('Valid email is required'),
   check('openHour').notEmpty().withMessage('Open hour is required'),
   check('closeHour').notEmpty().withMessage('Close hour is required'),
-  check('commerceTypeId').notEmpty().withMessage('Commerce type is required'),
-  check('password').notEmpty().withMessage('Password is required'),
-  check('confirmPassword').custom((value, { req }) => value === req.body.password).withMessage('Passwords must match')
+  check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  check('confirmPassword').custom((value, { req }) => {
+    if (value !== req.body.password) {
+      throw new Error('Passwords do not match');
+    }
+    return true;
+  })
 ], authController.postRegisterCommerce);
 
 router.get('/reset-password-request', authController.getResetRequest);

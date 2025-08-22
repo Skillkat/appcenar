@@ -39,18 +39,25 @@ router.post('/admin/edit/:id', [
   check('username').notEmpty().withMessage('Username is required')
 ], adminController.postEditAdmin);
 router.post('/admin/:id/toggle-active', adminController.toggleAdminActive);
-router.get('/commerce-types', adminController.getCommerceTypes);
-router.get('/commerce-type/new', adminController.getNewCommerceType);
-router.post('/commerce-type/new', [
+router.get('/commerce/new', adminController.getNewCommerce);
+router.post('/commerce/new', [
   check('name').notEmpty().withMessage('Name is required'),
-  check('description').notEmpty().withMessage('Description is required')
-], adminController.postNewCommerceType);
-router.get('/commerce-type/edit/:id', adminController.getEditCommerceType);
-router.post('/commerce-type/edit/:id', [
+  check('phone').notEmpty().withMessage('Phone is required'),
+  check('email').isEmail().withMessage('Valid email is required'),
+  check('openHour').notEmpty().withMessage('Open hour is required'),
+  check('closeHour').notEmpty().withMessage('Close hour is required'),
+  check('username').notEmpty().withMessage('Username is required'),
+  check('password').notEmpty().withMessage('Password is required'),
+  check('confirmPassword').custom((value, { req }) => value === req.body.password).withMessage('Passwords must match')
+], adminController.postNewCommerce);
+router.get('/commerce/edit/:id', adminController.getEditCommerce);
+router.post('/commerce/edit/:id', [
   check('name').notEmpty().withMessage('Name is required'),
-  check('description').notEmpty().withMessage('Description is required')
-], adminController.postEditCommerceType);
-router.get('/commerce-type/delete/:id', adminController.getDeleteCommerceType);
-router.post('/commerce-type/delete/:id', adminController.postDeleteCommerceType);
+  check('phone').notEmpty().withMessage('Phone is required'),
+  check('email').isEmail().withMessage('Valid email is required'),
+  check('openHour').notEmpty().withMessage('Open hour is required'),
+  check('closeHour').notEmpty().withMessage('Close hour is required'),
+  check('username').notEmpty().withMessage('Username is required')
+], adminController.postEditCommerce);
 
 module.exports = router;

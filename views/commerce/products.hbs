@@ -1,29 +1,35 @@
-<h2>Mantenimiento de Productos</h2>
-<a href="/commerce/product/new" class="btn btn-primary mb-3">Nuevo Producto</a>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Imagen</th>
-      <th>Nombre</th>
-      <th>Descripción</th>
-      <th>Categoría</th>
-      <th>Precio</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each products}}
+<div class="container">
+  <h2>Mantenimiento de Productos</h2>
+  <a href="/commerce/product/new" class="btn btn-primary mb-3">Nuevo Producto</a>
+  <table class="table">
+    <thead>
       <tr>
-        <td>{{#if this.photo}}<img src="/uploads/{{this.photo}}" alt="{{this.name}}" style="width: 50px; height: 50px; object-fit: cover;">{{/if}}</td>
-        <td>{{this.name}}</td>
-        <td>{{this.description}}</td>
-        <td>{{this.Category.name}}</td>
-        <td>RD$ {{this.price}}</td>
-        <td>
-          <a href="/commerce/product/edit/{{this.id}}" class="btn btn-sm btn-primary">Editar</a>
-          <a href="/commerce/product/delete/{{this.id}}" class="btn btn-sm btn-danger">Eliminar</a>
-        </td>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Acciones</th>
       </tr>
-    {{/each}}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {{#each products}}
+        <tr>
+          <td>{{#if photo}}<img src="/Uploads/{{photo}}" alt="{{name}}" style="width: 50px; height: 50px; object-fit: cover;">{{else}}Sin imagen{{/if}}</td>
+          <td>{{name}}</td>
+          <td>{{description}}</td>
+          <td>{{Category.name}}</td>
+          <td>RD$ {{price}}</td>
+          <td>
+            <a href="/commerce/product/edit/{{id}}" class="btn btn-sm btn-primary">Editar</a>
+            <a href="/commerce/product/delete/{{id}}" class="btn btn-sm btn-danger">Eliminar</a>
+          </td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="6">No hay productos disponibles.</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
