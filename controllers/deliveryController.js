@@ -4,12 +4,10 @@ const { validationResult } = require('express-validator');
 exports.getHome = async (req, res) => {
   try {
     console.log('GET /delivery/home called for userId:', req.session.userId);
-    // Obtener comercios activos
     const commerces = await CommerceProfile.findAll({
       include: [{ model: User, as: 'User', attributes: ['id', 'active'], where: { active: true } }],
       attributes: ['id', 'name', 'phone', 'logo', 'openHour', 'closeHour']
     });
-    // Obtener pedidos asignados al repartidor
     const orders = await Order.findAll({
       where: { deliveryId: req.session.userId },
       include: [
@@ -20,7 +18,6 @@ exports.getHome = async (req, res) => {
       ],
       order: [['createdAt', 'DESC']]
     });
-    // Obtener pedidos nuevos (pendientes, sin repartidor)
     const newOrders = await Order.findAll({
       where: { status: 'pending', deliveryId: null },
       include: [

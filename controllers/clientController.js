@@ -9,7 +9,6 @@ exports.getHome = async (req, res) => {
         include: [{ model: User, as: 'User', attributes: ['id', 'active'] }],
         attributes: ['id', 'name', 'phone', 'logo', 'openHour', 'closeHour']
       });
-      // Convertir a objetos planos
       const plainCommerces = commerces.map(commerce => commerce.get({ plain: true }));
       console.log('Commerces found:', plainCommerces.length);
       console.log('Commerce details:', JSON.stringify(plainCommerces, null, 2));
@@ -65,7 +64,7 @@ exports.getCatalog = async (req, res) => {
         cartMessage: req.session.cartMessage || null,
         bodyMenu: 'menuClient'
       });
-      delete req.session.cartMessage; // Limpiar mensaje después de mostrarlo
+      delete req.session.cartMessage; 
     } catch (error) {
       console.error('Error in getCatalog:', error);
       res.status(500).render('error', { error: 'Something went wrong!', bodyMenu: 'menuClient' });
@@ -143,7 +142,6 @@ exports.getCatalog = async (req, res) => {
         req.session.cartMessage = 'El carrito está vacío';
         return res.redirect(`/client/catalog/${commerceId}`);
       }
-      // Validar que todos los productos pertenezcan al mismo comercio
       for (const item of cart) {
         const product = await Product.findByPk(item.productId, {
           include: [{ model: Category, as: 'Category', attributes: ['commerceId'] }]
@@ -154,7 +152,7 @@ exports.getCatalog = async (req, res) => {
           return res.redirect(`/client/catalog/${commerceId}`);
         }
       }
-      const itbis = 18; // ITBIS fijo del 18%
+      const itbis = 18; 
       const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
       const itbisAmount = subtotal * (itbis / 100);
       const total = subtotal + itbisAmount;
@@ -184,7 +182,7 @@ exports.postSelectAddress = async (req, res) => {
         const commerce = await CommerceProfile.findByPk(req.params.commerceId, { include: [{ model: User, as: 'User' }] });
         const addresses = await Address.findAll({ where: { clientId: req.session.userId } });
         const cart = req.session.cart || [];
-        const itbis = 18; // ITBIS fijo del 18%
+        const itbis = 18; 
         const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         const itbisAmount = subtotal * (itbis / 100);
         const total = subtotal + itbisAmount;
@@ -213,7 +211,7 @@ exports.postSelectAddress = async (req, res) => {
         console.log('Invalid address:', addressId, 'for clientId:', req.session.userId);
         const commerce = await CommerceProfile.findByPk(commerceId, { include: [{ model: User, as: 'User' }] });
         const addresses = await Address.findAll({ where: { clientId: req.session.userId } });
-        const itbis = 18; // ITBIS fijo del 18%
+        const itbis = 18;
         const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         const itbisAmount = subtotal * (itbis / 100);
         const total = subtotal + itbisAmount;
@@ -239,7 +237,7 @@ exports.postSelectAddress = async (req, res) => {
           return res.redirect(`/client/catalog/${commerceId}`);
         }
       }
-      const itbis = 18; // ITBIS fijo del 18%
+      const itbis = 18; 
       const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
       const itbisAmount = subtotal * (itbis / 100);
       const total = subtotal + itbisAmount;

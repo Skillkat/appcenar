@@ -32,7 +32,6 @@ exports.postProfile = async (req, res) => {
 exports.getCategories = async (req, res) => {
     try {
       console.log('getCategories called, userId:', req.session.userId);
-      // Obtener el CommerceProfile asociado al usuario
       const commerce = await CommerceProfile.findOne({ where: { userId: req.session.userId } });
       if (!commerce) {
         console.log('CommerceProfile not found for userId:', req.session.userId);
@@ -42,7 +41,6 @@ exports.getCategories = async (req, res) => {
         where: { commerceId: commerce.id },
         include: [{ model: Product, as: 'Products', attributes: ['id'] }]
       });
-      // Convertir a objetos planos para Handlebars
       const plainCategories = categories.map(category => category.get({ plain: true }));
       console.log('Categories found:', plainCategories.length, 'Details:', JSON.stringify(plainCategories, null, 2));
       res.render('commerce/categories', { categories: plainCategories, bodyMenu: 'menuCommerce' });
@@ -65,7 +63,6 @@ exports.postNewCategory = async (req, res) => {
         return res.render('commerce/categoryForm', { category: req.body, errors: errors.array(), bodyMenu: 'menuCommerce' });
       }
       const { name, description } = req.body;
-      // Obtener el CommerceProfile asociado al usuario
       const commerce = await CommerceProfile.findOne({ where: { userId: req.session.userId } });
       if (!commerce) {
         console.log('CommerceProfile not found for userId:', req.session.userId);
@@ -108,7 +105,6 @@ exports.postDeleteCategory = async (req, res) => {
 exports.getProducts = async (req, res) => {
     try {
       console.log('getProducts called, userId:', req.session.userId);
-      // Obtener el CommerceProfile asociado al usuario
       const commerce = await CommerceProfile.findOne({ where: { userId: req.session.userId } });
       if (!commerce) {
         console.log('CommerceProfile not found for userId:', req.session.userId);
@@ -118,7 +114,6 @@ exports.getProducts = async (req, res) => {
         where: { categoryId: { [Op.in]: (await Category.findAll({ where: { commerceId: commerce.id } })).map(c => c.id) } },
         include: [{ model: Category, as: 'Category', attributes: ['id', 'name'] }]
       });
-      // Convertir a objetos planos para Handlebars
       const plainProducts = products.map(product => product.get({ plain: true }));
       console.log('Products found:', plainProducts.length, 'Details:', JSON.stringify(plainProducts, null, 2));
       res.render('commerce/products', { products: plainProducts, bodyMenu: 'menuCommerce' });
@@ -168,7 +163,6 @@ exports.getProducts = async (req, res) => {
         console.log('CommerceProfile not found for userId:', req.session.userId);
         return res.status(404).render('error', { error: 'Commerce profile not found', bodyMenu: 'menuCommerce' });
       }
-      // Verificar que categoryId pertenece al comercio
       const category = await Category.findOne({ where: { id: categoryId, commerceId: commerce.id } });
       if (!category) {
         console.log('Category not found for id:', categoryId, 'commerceId:', commerce.id);

@@ -112,7 +112,6 @@ exports.postRegisterCommerce = async (req, res) => {
   const { name, phone, email, openHour, closeHour, password, confirmPassword } = req.body;
 
   try {
-    // Validar que las contraseñas coincidan
     if (password !== confirmPassword) {
       return res.render('auth/registerCommerce', {
         user: req.body,
@@ -121,7 +120,6 @@ exports.postRegisterCommerce = async (req, res) => {
       });
     }
 
-    // Crear usuario con rol 'commerce'
     const user = await User.create({
       username: name,
       email,
@@ -131,7 +129,6 @@ exports.postRegisterCommerce = async (req, res) => {
       activationToken: require('crypto').randomBytes(20).toString('hex')
     });
 
-    // Crear perfil del comercio
     console.log('Creating CommerceProfile with:', {
       userId: user.id,
       name,

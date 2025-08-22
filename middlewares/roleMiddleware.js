@@ -12,7 +12,7 @@ module.exports = (roles) => async (req, res, next) => {
       console.log('Unauthorized role:', user.role, 'expected:', roles);
       return res.status(403).render('error', { error: 'Access denied', bodyMenu: '' });
     }
-    req.session.role = user.role; // Actualizar session.role por si acaso
+    req.session.role = user.role; 
     console.log('Role authorized:', user.role);
     next();
   } catch (error) {

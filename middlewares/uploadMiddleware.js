@@ -10,4 +10,4 @@ const storage = multer.diskStorage({
   }
 });
 
-module.exports = multer({ storage }).single('file');  // 'file' is field name, change per form
+module.exports = multer({ storage }).single('file'); 

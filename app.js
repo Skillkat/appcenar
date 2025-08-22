@@ -8,7 +8,6 @@ require('dotenv').config();
 
 const app = express();
 
-// Configuración de Handlebars con helper personalizado
 app.engine('hbs', engine({
   extname: '.hbs',
   defaultLayout: 'layout',
@@ -27,12 +26,10 @@ app.engine('hbs', engine({
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Configuración de la sesión
 const sessionStore = new SequelizeStore({
   db: sequelize,
 });
@@ -45,7 +42,6 @@ app.use(session({
 }));
 sessionStore.sync();
 
-// Rutas
 const authRoutes = require('./routes/auth');
 const clientRoutes = require('./routes/client');
 const commerceRoutes = require('./routes/commerce');
@@ -62,7 +58,6 @@ app.get('/', (req, res) => {
   res.redirect('/auth/login');
 });
 
-// Sincronización de la base de datos
 sequelize.sync({ force: false }).then(() => {
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Server running on port ${process.env.PORT || 3000}`);
